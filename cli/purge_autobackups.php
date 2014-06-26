@@ -25,7 +25,20 @@ require_once($CFG -> dirroot . '/lib/datalib.php');
 
 // =======================================================================
 // =======================================================================
-$dst_dir = $CFG -> backup_auto_destination;
+# $dst_dir = $CFG -> backup_auto_destination;
+
+// =======================================================================
+// =======================================================================
+$options = getopt("qxcd:");
+$config  = get_config('backup');
+
+if (array_key_exists('c', $options)) {
+	if (array_key_exists('d', $options) && !empty($options['d']) ) {
+		$dst_dir = $options['d'];
+	} else {
+		$dst_dir = $config -> backup_auto_destination;
+	}
+}
 
 // =======================================================================
 // =======================================================================
@@ -43,36 +56,38 @@ $sth = $DB -> get_records_sql($sql);
 $fs = get_file_storage();
 
 foreach ($sth as $id => $row) {
-	printf("| %6d | % 7.2f | %s | %s \n", $row -> id, $row -> filesize / MB, $row -> mtime, $row -> fullname);
+
+	if (!array_key_exists('q', $options)) {
+		printf("| %6d | % 7.2f | %s | %s \n", $row -> id, $row -> filesize / MB, $row -> mtime, $row -> fullname);
+	}
+
 	$file = $fs -> get_file($row -> contextid, 'backup', 'automated', $row -> itemid, $row -> filepath, $row -> filename);
 	if ($file) { // file found
-/*
 
-		// Copy file
-		if ( $file -> copy_content_to($dst_dir  . '/' . $file -> get_filename()) ) {
-			echo "File sent to $base_dir: " . $file -> get_filename . "\n";
-		} else {
-			echo 'Could not copy file:    ' . $file -> get_filename . "\n";
+		if (array_key_exists('c', $options)) {
+			// Copy file
+			if ( $file -> copy_content_to($dst_dir  . '/' . $file -> get_filename()) ) {
+				echo "File sent to $dst_dir:  " . $file -> get_filename() . "\n";
+			} else {
+				echo 'Could not copy file:    ' . $file -> get_filename() . "\n";
+			}
 		}
 
-		// Delete file
-		if ( $file -> delete() ) {
-			echo 'File sent to trash:    ' . $file -> get_filename . "\n";
-		} else {
-			echo 'Could not delete file: ' . $file -> get_filename . "\n";
+		if (array_key_exists('x', $options)) {
+			// Delete file
+			if ( $file -> delete() ) {
+				echo 'File sent to trash:    ' . $file -> get_filename() . "\n";
+			} else {
+				echo 'Could not delete file: ' . $file -> get_filename() . "\n";
+			}
 		}
 
 
-*/
 	}
 
 }
 
 print $CFG -> fileslastcleanup . "\n";
-
-
-
-
 
 // =======================================================================
 ?>
