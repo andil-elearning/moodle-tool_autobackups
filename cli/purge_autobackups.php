@@ -89,7 +89,9 @@ foreach ($sth as $id => $row) {
 
 // =======================================================================
 // Set fileslastcleanup far in the past to force trash emptying
-set_config('fileslastcleanup', time() - 60 * 60 * 24 * 5);
+if (array_key_exists('x', $options)) {
+	set_config('fileslastcleanup', time() - 60 * 60 * 24 * 5);
+}
 
 ?>
 
