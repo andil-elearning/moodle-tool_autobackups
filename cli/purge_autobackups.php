@@ -87,8 +87,9 @@ foreach ($sth as $id => $row) {
 
 }
 
-print $CFG -> fileslastcleanup . "\n";
-
 // =======================================================================
+// Set fileslastcleanup far in the past to force trash emptying
+set_config('fileslastcleanup', time() - 60 * 60 * 24 * 5);
+
 ?>
 
