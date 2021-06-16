@@ -12,9 +12,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin -> version   = 2014062600;
-$plugin -> requires  = 2010112400;
-$plugin -> component = 'tool_autobackups';       // Full name of the plugin (used for diagnostics)
-$plugin -> release   = '1.0.0';
-$plugin -> maturity  = MATURITY_STABLE;
+$plugin->version = 2021061600;
+$plugin->requires = 2010112400;
+$plugin->component = 'tool_autobackups';       // Full name of the plugin (used for diagnostics)
+$plugin->release = '1.0.0';
+$plugin->maturity = MATURITY_STABLE;
 
